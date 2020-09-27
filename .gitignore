@@ -348,3 +348,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/IdealGas/IdealGas.sln
+/IdealGas/IdealGas.vcxproj
+/IdealGas/IdealGas.vcxproj.filters
