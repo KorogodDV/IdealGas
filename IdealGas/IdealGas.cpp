@@ -1,5 +1,6 @@
 #include "math.h"
 #include <SFML/Graphics.hpp>
+#include <cassert>
 
 const float DT = 1.0;
 const float speedboost = 0.001;
@@ -26,6 +27,7 @@ struct Sphere
 void drawSphere(sf::RenderWindow* window, Sphere sphere, int lighting_detailing = 10)
 {
     sf::CircleShape circle(sphere.r);
+    assert(sphere.pos.x > sphere.r || sphere.pos.x + sphere.r < window_length || sphere.pos.y > sphere.r || sphere.pos.y + sphere.r < window_width);
     for (int i = 0; i < lighting_detailing; i++)
     {
         circle.setRadius(sphere.r - sphere.r * i / lighting_detailing);
@@ -78,6 +80,7 @@ void collideSpheres(Sphere* sphere1, Sphere* sphere2)
     float vx20 = sphere2->speed.x;
     float vy20 = sphere2->speed.y;
     float dist = sqrt(pow(sphere2->pos.x - sphere1->pos.x, 2) + pow(sphere2->pos.y - sphere1->pos.y, 2));
+    assert(dist);
     
     sphere1->pos.x -= (sphere1->r + sphere2->r - dist) * (sphere2->pos.x - sphere1->pos.x) / (2 * dist);
     sphere1->pos.y -= (sphere1->r + sphere2->r - dist) * (sphere2->pos.y - sphere1->pos.y) / (2 * dist);
@@ -98,7 +101,7 @@ int main()
     Sphere particles[100];
     for (int i = 0; i < 100; i++)
     {
-        particles[i] = { float(50 * i % (window_length - 100) + 50), float(100 * (50 * i - 50 * i % (window_length - 100)) / (window_length - 100) + 100), 12, float(0.1 * i), float(-0.1 * i), 1, 10 * i % 255, 15 * i % 255, 5 * i % 255};
+        particles[i] = { float(50 * i % (window_length - 100) + 50), float(100 * (50 * i - 50 * i % (window_length - 100)) / (window_length - 100) + 50), 12, float(0.1 * i), float(-0.1 * i), 1, 10 * i % 255, 15 * i % 255, 5 * i % 255};
     }
 
     while (window.isOpen())
