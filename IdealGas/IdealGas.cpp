@@ -1,6 +1,5 @@
 #include "math.h"
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
 const float DT = 1.0;
 const float speedboost = 0.001;
