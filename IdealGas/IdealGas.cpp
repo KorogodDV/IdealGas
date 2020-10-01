@@ -33,7 +33,7 @@ void drawSphere(sf::RenderWindow* window, Sphere sphere, int lighting_detailing 
         circle.setRadius(sphere.r - sphere.r * i / lighting_detailing);
         circle.setPosition(sphere.pos.x - sphere.r + 1.4 * sphere.r * i / lighting_detailing, sphere.pos.y - sphere.r + 0.6 * sphere.r * i / lighting_detailing);
         circle.setFillColor(sf::Color(0.875 * sphere.red * i / lighting_detailing + 0.125 * sphere.red, 0.875 * sphere.green * i / lighting_detailing + 0.125 * sphere.green, 0.875 * sphere.blue * i / lighting_detailing + 0.125 * sphere.blue));
-        (*window).draw(circle);
+        window->draw(circle);
     }
 }
 
