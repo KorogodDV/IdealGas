@@ -26,7 +26,7 @@ struct Sphere
 
 void drawSphere(sf::RenderWindow* window, Sphere sphere, int lighting_detailing = 10)
 {
-    sf::CircleShape circle(sphere.r);
+    sf::CircleShape circle(sphere.r, 10);
     assert(sphere.pos.x > sphere.r || sphere.pos.x + sphere.r < window_length || sphere.pos.y > sphere.r || sphere.pos.y + sphere.r < window_width);
     for (int i = 0; i < lighting_detailing; i++)
     {
@@ -101,7 +101,7 @@ int main()
     Sphere particles[100];
     for (int i = 0; i < 100; i++)
     {
-        particles[i] = { float(50 * i % (window_length - 100) + 50), float(100 * (50 * i - 50 * i % (window_length - 100)) / (window_length - 100) + 50), 12, float(0.1 * i), float(-0.1 * i), 1, 10 * i % 255, 15 * i % 255, 5 * i % 255};
+        particles[i] = { float(30 * i % (window_length - 100) + 50), float(100 * (30 * i - 30 * i % (window_length - 100)) / (window_length - 100) + 50), 12, float(0.1 * i), float(-0.1 * i), 1, 10 * i % 255, 15 * i % 255, 5 * i % 255};
     }
 
     while (window.isOpen())
