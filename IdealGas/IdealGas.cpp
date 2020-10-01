@@ -27,7 +27,7 @@ struct Sphere
 void drawSphere(sf::RenderWindow* window, Sphere sphere, int lighting_detailing = 10)
 {
     sf::CircleShape circle(sphere.r, 10);
-    assert(sphere.pos.x > sphere.r || sphere.pos.x + sphere.r < window_length || sphere.pos.y > sphere.r || sphere.pos.y + sphere.r < window_width);
+    assert(sphere.pos.x > sphere.r & sphere.pos.x + sphere.r < window_length & sphere.pos.y > sphere.r & sphere.pos.y + sphere.r < window_width);
     for (int i = 0; i < lighting_detailing; i++)
     {
         circle.setRadius(sphere.r - sphere.r * i / lighting_detailing);
