@@ -27,7 +27,7 @@ struct Sphere
 void drawSphere(sf::RenderWindow* window, Sphere sphere, int lighting_detailing = 10)
 {
     sf::CircleShape circle(sphere.r, 10);
-    assert(sphere.pos.x > sphere.r & sphere.pos.x + sphere.r < window_length & sphere.pos.y > sphere.r & sphere.pos.y + sphere.r < window_width);
+    assert((sphere.pos.x > sphere.r) & (sphere.pos.x + sphere.r < window_length) & (sphere.pos.y > sphere.r) & (sphere.pos.y + sphere.r < window_width));
     for (int i = 0; i < lighting_detailing; i++)
     {
         circle.setRadius(sphere.r - sphere.r * i / lighting_detailing);
@@ -80,12 +80,45 @@ void collideSpheres(Sphere* sphere1, Sphere* sphere2)
     float vx20 = sphere2->speed.x;
     float vy20 = sphere2->speed.y;
     float dist = sqrt(pow(sphere2->pos.x - sphere1->pos.x, 2) + pow(sphere2->pos.y - sphere1->pos.y, 2));
+    float dist_x = sphere2->pos.x - sphere1->pos.x;
+    float dist_y = sphere2->pos.y - sphere1->pos.y;
     assert(dist);
     
-    sphere1->pos.x -= (sphere1->r + sphere2->r - dist) * (sphere2->pos.x - sphere1->pos.x) / (2 * dist);
-    sphere1->pos.y -= (sphere1->r + sphere2->r - dist) * (sphere2->pos.y - sphere1->pos.y) / (2 * dist);
-    sphere2->pos.x += (sphere1->r + sphere2->r - dist) * (sphere2->pos.x - sphere1->pos.x) / (2 * dist);
-    sphere2->pos.y += (sphere1->r + sphere2->r - dist) * (sphere2->pos.y - sphere1->pos.y) / (2 * dist); 
+    if ((sphere1->pos.x - (sphere1->r + sphere2->r - dist) * dist_x / (2 * dist) > sphere1->r) & (sphere1->pos.x - (sphere1->r + sphere2->r - dist) * dist_x / (2 * dist) < window_length - sphere1->r) & (sphere2->pos.x + (sphere1->r + sphere2->r - dist) * dist_x / (2 * dist) > sphere2->r) & (sphere2->pos.x + (sphere1->r + sphere2->r - dist) * dist_x / (2 * dist) < window_length - sphere2->r))
+    {
+        sphere1->pos.x -= (sphere1->r + sphere2->r - dist) * dist_x/ (2 * dist);
+        sphere2->pos.x += (sphere1->r + sphere2->r - dist) * dist_x / (2 * dist);
+    }
+    else if ((sphere1->pos.x - (sphere1->r + sphere2->r - dist) * dist_x / (2 * dist)) <= sphere1->r)
+    {
+        sphere2->pos.x += (sphere1->r + sphere2->r - dist) * dist_x / dist;
+    }
+    else if ((sphere1->pos.x - (sphere1->r + sphere2->r - dist) * dist_x / (2 * dist)) >= window_length - sphere1->r)
+    {
+        sphere2->pos.x += (sphere1->r + sphere2->r - dist) * dist_x / dist;
+    }
+    else if ((sphere2->pos.x + (sphere1->r + sphere2->r - dist) * dist_x / (2 * dist)) <= sphere2->r)
+    {
+        sphere1->pos.x -= (sphere1->r + sphere2->r - dist) * dist_x / dist;
+    }
+    else
+    {
+        sphere1->pos.x -= (sphere1->r + sphere2->r - dist) * dist_x / dist;
+    }
+
+    if ((sphere1->pos.y - (sphere1->r + sphere2->r - dist) * dist_y / (2 * dist) > sphere1->r) & (sphere1->pos.y - (sphere1->r + sphere2->r - dist) * dist_y / (2 * dist) < window_length - sphere1->r) & (sphere2->pos.y + (sphere1->r + sphere2->r - dist) * dist_y / (2 * dist) > sphere2->r) & (sphere2->pos.y + (sphere1->r + sphere2->r - dist) * dist_y / (2 * dist) < window_length - sphere2->r))
+    {
+        sphere1->pos.y -= (sphere1->r + sphere2->r - dist) * dist_y / (2 * dist);
+        sphere2->pos.y += (sphere1->r + sphere2->r - dist) * dist_y / (2 * dist);
+    }
+    else if ((sphere1->pos.y - (sphere1->r + sphere2->r - dist) * dist_y / (2 * dist)) <= sphere1->r)
+        sphere2->pos.y += (sphere1->r + sphere2->r - dist) * dist_y / dist;
+    else if ((sphere1->pos.y - (sphere1->r + sphere2->r - dist) * dist_y / (2 * dist)) >= window_width - sphere1->r)
+        sphere2->pos.y += (sphere1->r + sphere2->r - dist) * dist_y / dist;
+    else if ((sphere2->pos.y + (sphere1->r + sphere2->r - dist) * dist_y / (2 * dist)) <= sphere2->r)
+        sphere1->pos.y -= (sphere1->r + sphere2->r - dist) * dist_y / dist;
+    else
+        sphere1->pos.y -= (sphere1->r + sphere2->r - dist) * dist_y / dist;
 
     sphere1->speed.x = (2 * sphere2->m * vx20 + (sphere1->m - sphere2->m) * vx10) / (sphere1->m + sphere2->m);
     sphere1->speed.y = (2 * sphere2->m * vy20 + (sphere1->m - sphere2->m) * vy10) / (sphere1->m + sphere2->m);
@@ -101,7 +134,7 @@ int main()
     Sphere particles[100];
     for (int i = 0; i < 100; i++)
     {
-        particles[i] = { float(30 * i % (window_length - 100) + 50), float(100 * (30 * i - 30 * i % (window_length - 100)) / (window_length - 100) + 50), 12, float(0.1 * i), float(-0.1 * i), 1, 10 * i % 255, 15 * i % 255, 5 * i % 255};
+        particles[i] = { float(30 * i % (window_length - 100) + 50), float(100 * (30 * i - 30 * i % (window_length - 100)) / (window_length - 100) + 50), 12, float(0.3 * i), float(0.1 * i), 1, 10 * i % 255, 15 * i % 255, 5 * i % 255};
     }
 
     while (window.isOpen())
@@ -125,11 +158,6 @@ int main()
 
         for (int i = 0; i < 100; i++)
         {
-            checkSphereColideWithWalls(&particles[i]);
-        }
-
-        for (int i = 0; i < 100; i++)
-        {
             for (int j = i + 1; j < 100; j++)
             {
                 if (checkCollisionTwoSpheres(&particles[i], &particles[j]))
@@ -137,6 +165,11 @@ int main()
                     collideSpheres(&particles[i], &particles[j]);
                 }
             }
+        }
+
+        for (int i = 0; i < 100; i++)
+        {
+            checkSphereColideWithWalls(&particles[i]);
         }
 
         for (int i = 0; i < 100; i++)
