@@ -90,21 +90,13 @@ void collideSpheres(Sphere* sphere1, Sphere* sphere2)
         sphere2->pos.x += (sphere1->r + sphere2->r - dist) * dist_x / (2 * dist);
     }
     else if ((sphere1->pos.x - (sphere1->r + sphere2->r - dist) * dist_x / (2 * dist)) <= sphere1->r)
-    {
         sphere2->pos.x += (sphere1->r + sphere2->r - dist) * dist_x / dist;
-    }
     else if ((sphere1->pos.x - (sphere1->r + sphere2->r - dist) * dist_x / (2 * dist)) >= window_length - sphere1->r)
-    {
         sphere2->pos.x += (sphere1->r + sphere2->r - dist) * dist_x / dist;
-    }
     else if ((sphere2->pos.x + (sphere1->r + sphere2->r - dist) * dist_x / (2 * dist)) <= sphere2->r)
-    {
         sphere1->pos.x -= (sphere1->r + sphere2->r - dist) * dist_x / dist;
-    }
     else
-    {
         sphere1->pos.x -= (sphere1->r + sphere2->r - dist) * dist_x / dist;
-    }
 
     if ((sphere1->pos.y - (sphere1->r + sphere2->r - dist) * dist_y / (2 * dist) > sphere1->r) & (sphere1->pos.y - (sphere1->r + sphere2->r - dist) * dist_y / (2 * dist) < window_length - sphere1->r) & (sphere2->pos.y + (sphere1->r + sphere2->r - dist) * dist_y / (2 * dist) > sphere2->r) & (sphere2->pos.y + (sphere1->r + sphere2->r - dist) * dist_y / (2 * dist) < window_length - sphere2->r))
     {
